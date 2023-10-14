@@ -605,16 +605,9 @@ This includes prefixes or modifiers (eg \"mov\", \"rep mov\", etc match)")
 (defvar nasm-mode-map
   (let ((map (make-sparse-keymap)))
     (prog1 map
-      (define-key map (kbd ":") #'nasm-colon)
       (define-key map (kbd ";") #'nasm-comment)
       (define-key map [remap join-line] #'nasm-join-line)))
   "Key bindings for `nasm-mode'.")
-
-(defun nasm-colon ()
-  "Insert a colon and convert the current line into a label."
-  (interactive)
-  (call-interactively #'self-insert-command)
-  (nasm-indent-line))
 
 (defun nasm-indent-line ()
   "Indent current line (or insert a tab) as NASM assembly code.
