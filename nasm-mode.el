@@ -707,25 +707,7 @@ With a prefix arg, kill the comment on the current line with
   (interactive "p")
   (if (not (eql arg 1))
       (comment-kill nil)
-    (cond
-     ;; Empty line, or inside a string? Insert.
-     ((or (nasm--empty-line-p) (nth 3 (syntax-ppss)))
-      (insert ";"))
-     ;; Inside the indentation? Comment out the line.
-     ((nasm--inside-indentation-p)
-      (insert ";"))
-     ;; Currently in a right-side comment? Return.
-     ((and (nasm--line-has-comment-p)
-           (nasm--line-has-non-comment-p)
-           (nth 4 (syntax-ppss)))
-      (setf (point) (mark))
-      (pop-mark))
-     ;; Line has code? Mark and jump to right-side comment.
-     ((nasm--line-has-non-comment-p)
-      (push-mark)
-      (comment-indent))
-     ;; Otherwise insert.
-     ((insert ";")))))
+    (insert ";")))
 
 (defun nasm-join-line (join-following-p)
   "Like `join-line', but use a tab when joining with a label."
