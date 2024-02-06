@@ -723,7 +723,7 @@ With a prefix arg, kill the comment on the current line with
   (make-local-variable 'comment-insert-comment-function)
   (make-local-variable 'comment-indent-function)
   (setf font-lock-defaults '(nasm-font-lock-keywords nil :case-fold)
-        ;indent-line-function #'nasm-indent-line
+        indent-line-function #'tab-to-tab-stop
         comment-start ";"
         ;comment-indent-function #'nasm-comment-indent
         comment-insert-comment-function #'nasm-insert-comment
