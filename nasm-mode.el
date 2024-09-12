@@ -546,6 +546,11 @@ This can be :tab, :space, or nil (do nothing)."
   (concat nasm-nonlocal-label-rexexp "\\|" nasm-local-label-regexp)
   "Regexp for `nasm-mode' for matching labels.")
 
+(defconst nasm-label-line-regexp
+  (concat "\\(" nasm-label-regexp "\\)\\s-*$")
+  "Regexp for `nasm-mode' for matching label-only lines.
+Used to indent lines that contain a label and an instruction/directive.")
+
 (defconst nasm-constant-regexp
   "\\_<$?[-+]?[0-9][-+_0-9A-Fa-fHhXxDdTtQqOoBbYyeE.]*\\_>"
   "Regexp for `nasm-mode' for matching numeric constants.")
@@ -631,7 +636,8 @@ is not immediately after a mnemonic; otherwise, we insert a tab."
         (if (or (looking-at (nasm--opt nasm-directives))
                 (looking-at (nasm--opt nasm-pp-directives))
                 (looking-at "\\[")
-                (looking-at ";;+"))
+                (looking-at ";;+")
+                (looking-at nasm-label-line-regexp))
             (indent-line-to 0)
           (indent-line-to nasm-basic-offset))
         (when (> (- (point-max) orig) (point))
@@ -723,7 +729,7 @@ With a prefix arg, kill the comment on the current line with
   (make-local-variable 'comment-insert-comment-function)
   (make-local-variable 'comment-indent-function)
   (setf font-lock-defaults '(nasm-font-lock-keywords nil :case-fold)
-        indent-line-function #'tab-to-tab-stop
+        indent-line-function #'nasm-indent-line
         comment-start ";"
         ;comment-indent-function #'nasm-comment-indent
         comment-insert-comment-function #'nasm-insert-comment
